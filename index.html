@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <title>Points on a map</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.css' rel='stylesheet' />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+      }
+		p {
+			overflow: auto;
+		}
+		.mapboxgl-popup-content {
+			max-width: 300px;
+			max-height: 300px;
+			background-color: #FFFFFC;
+		}
+		.mapboxgl-popup-content p{
+			max-width: 300px;
+			max-height: 200px;
+		}
+		.mapboxgl-popup-content h3{
+			background-color: #682B33;
+			text-align: center;
+			vertical-align:middle;
+			color: #FECB6E;
+			padding-bottom: 10px;
+			padding-top: 10px;
+		}
+    </style>
+  </head>
+  <body>
+    <div id='map'></div>
+    <script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoibXN0b2NrbWFsIiwiYSI6ImNqaHA4enJocjRibHUzNnMyN2d1dmdyNGEifQ.hpJLWvZ8_lVhwpXIu8jcAQ'; // replace this with your access token
+    var map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mstockmal/cjhkyofhl009d2rmrz24kzr09' // replace this with your style UR
+    });
+	map.on('click', function(e) {
+	  var features = map.queryRenderedFeatures(e.point, {
+		layers: ['landmarked-homes-hinsdale'] // replace this with the name of the layer
+	  });
+
+	  if (!features.length) {
+		return;
+	  }
+
+	  var feature = features[0];
+
+	  var popup = new mapboxgl.Popup({ offset: [0, -15] })
+		.setLngLat(feature.geometry.coordinates)
+		.setHTML('<h3>' + feature.properties.title + '</h3><p>' + feature.properties.description + '</p>')
+		.setLngLat(feature.geometry.coordinates)
+		.addTo(map);
+	});
+    // code from the next step will go here
+    </script>
+  </body>
+</html>
